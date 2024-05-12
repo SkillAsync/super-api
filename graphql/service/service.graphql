@@ -1,0 +1,50 @@
+type service {
+  uuid: String!
+  user: User! @belongsTo
+  category: category! @belongsTo
+  title: String!
+  description: String!
+  price: Float!
+  image: String!
+  status: status!
+}
+
+input CreateserviceInput {
+    user: String!
+    category: String!
+    title: String!
+    description: String!
+    price: Float!
+    image: String!
+    status: status!
+}
+
+enum status {
+    PENDING @enum(value: "pending")
+    ACTIVE @enum(value: "active")
+    INACTIVE @enum(value: "inactive")
+}
+
+input UpdateserviceInput {
+    user: String
+    category: String
+    title: String
+    description: String
+    price: Float
+    image: String
+    status: status
+}
+
+extend type Query {
+    getservice(
+        uuid: String! @eq
+    ): service! @find
+
+    getAllservices: [service!]! @all
+}
+
+extend type Mutation {
+    createservice(input: CreateserviceInput!): service! @create
+    updateservice(uuid: String!, input: UpdateserviceInput!): service! @update
+    deleteservice(uuid: String!): service! @delete
+}

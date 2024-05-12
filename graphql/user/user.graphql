@@ -1,0 +1,95 @@
+type User {  
+     uuid: String!
+    first_name: String
+    last_name: String
+    email: String!
+    email_verified_at: String
+    password: String
+    phone_country: String
+    phone: String
+    avatar: String
+    country: String
+    city: String
+    address: String
+    bio: String
+    role: role
+    enabled: Boolean
+}
+
+enum role {
+    ADMIN @enum(value: "admin")
+    USER  @enum(value: "user")
+    Freelancer @enum(value: "freelancer")
+}
+
+input CreateUserInput {
+    first_name: String
+    last_name: String
+    email: String!
+    password: String!
+    phone_country: String
+    phone: String
+    avatar: String
+    country: String
+    city: String
+    address: String
+    bio: String
+    role: role
+    enabled: Boolean
+}
+
+input UpdateUserInput {
+    first_name: String
+    last_name: String
+    email: String
+    password: String
+    phone_country: String
+    phone: String
+    avatar: String
+    country: String
+    city: String
+    address: String
+    bio: String
+    role: role
+    enabled: Boolean
+}
+
+extend type Query {
+    getUser(
+        uuid: String! @eq
+    ): User! @find 
+    getAllUsers(
+        last_name: String @where(operator: "like"),
+        first_name: String @where(operator: "like"),
+        email: String @where(operator: "like"),
+        orderBy: _ @orderBy(columns: [
+            "first_name",
+            "last_name",
+            "email",
+            "created_at",
+        ])
+    ): [User!]! @paginate(defaultCount: 10) 
+}
+
+extend type Mutation {
+    createUser(
+        input: CreateUserInput! @spread
+    ): User @create
+    updateUser(
+        uuid: String! @eq,
+        input: UpdateUserInput! @spread
+    ): User @update
+    deleteUser(
+        uuid: String! @eq
+    ): User @delete
+ }
+
+
+
+# type loginWebInput {
+#     email: String! @rules(apply: ["email", "required"])
+#     password: String! @rules(apply: ["required"])
+# }
+# extend type Mutation {
+#     login(input: loginWebInput! @spread): String @field(resolver: "AuthMutator@login")
+# }
