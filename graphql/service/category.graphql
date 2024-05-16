@@ -1,0 +1,27 @@
+type Category {
+  uuid: String!
+  name: String!
+  slug: String!
+  services: [Service!]! @hasMany
+}
+
+
+input createCategoryInput {
+  name: String!
+  slug: String!
+}
+
+input updateCategoryInput {
+  name: String
+  slug: String
+}
+
+extend type Query {
+    getCategory(uuid: String! @eq): Category @find
+}
+
+extend type Mutation {
+  createCategory(input: createCategoryInput!): Category @field(resolver: "CreateOrUpdateMutation")
+  updateCategory(uuid: String!, input: updateCategoryInput!): Category @field(resolver: "CreateOrUpdateMutation")
+  deleteCategory(uuid: String!): Category @delete
+}
