@@ -72,24 +72,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    createUser(
-        input: CreateUserInput! @spread
-    ): User @create
-    updateUser(
-        uuid: String! @eq,
-        input: UpdateUserInput! @spread
-    ): User @update
-    deleteUser(
-        uuid: String! @eq
-    ): User @delete
+    createUser(input: CreateUserInput! @spread): User @create
+    updateUser(uuid: String! @eq,input: UpdateUserInput! @spread): User @update
+    deleteUser(uuid: String! @eq): User @delete
  }
-
-
-
-# type loginWebInput {
-#     email: String! @rules(apply: ["email", "required"])
-#     password: String! @rules(apply: ["required"])
-# }
-# extend type Mutation {
-#     login(input: loginWebInput! @spread): String @field(resolver: "AuthMutator@login")
-# }
