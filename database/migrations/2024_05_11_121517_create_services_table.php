@@ -16,20 +16,21 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('slug');
+            $table->foreignId('created_by_id')->nullable()->constrained('users');
+            $table->foreignId('updated_by_id')->nullable()->constrained('users');
             $table->timestamps();
         });
 
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained("users")->onDelete('cascade');
+            $table->foreignId('category_id')->constrained("categories")->onDelete('cascade');
             $table->string('title');
             $table->text('description');
             $table->string('image')->nullable();
             $table->decimal('price', 10, 2); 
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->unsignedBigInteger('created_by_id')->nullable();
             $table->timestamps();
         });
     }
