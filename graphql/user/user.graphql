@@ -14,6 +14,7 @@ type User {
     bio: String
     role: role
     enabled: Boolean
+    services: [Service!]! @hasMany
 }
 
 enum role {
@@ -72,7 +73,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    createUser(input: CreateUserInput! @spread): User @create
-    updateUser(uuid: String! @eq,input: UpdateUserInput! @spread): User @update
+    createUser(input: CreateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") 
+    updateUser(uuid: String! @eq,input: UpdateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") 
     deleteUser(uuid: String! @eq): User @delete
  }
