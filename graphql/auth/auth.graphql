@@ -1,0 +1,14 @@
+input LoginInput {
+    username: String!
+    password: String!
+    device: String
+}
+
+extend type Query {
+    me: User @guard @auth
+}
+
+
+extend type Mutation {
+    login(input: LoginInput @spread): String @field(resolver: "Auth\\PasswordLogin")
+}
