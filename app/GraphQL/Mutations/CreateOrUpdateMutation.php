@@ -3,6 +3,7 @@
 namespace App\GraphQL\Mutations;
 
 use App\Exceptions\GraphQLException;
+use App\GraphQL\Mutations\TraitMutation\ModelosTrai;
 use App\GraphQL\Traits\EntityMutationTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -11,15 +12,16 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class CreateOrUpdateMutation
 {
-    use EntityMutationTrait;
+    use EntityMutationTrait,ModelosTrai;
 
     public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        
         $operationName = $resolveInfo->path[0] ?? $resolveInfo->operation->name->value;
         $modelName = $this->getModelNameFromOperation($operationName);
         $model = null;
         $arguments = $args['input'] ?? $args;
-
+        
         if (isset($arguments['model_uuid']) && isset($arguments['model_type'])) {
             $arguments['model_id'] = $this->getMorphIdFromUuid($arguments['model_type'], $arguments['model_uuid']);
         }
@@ -37,30 +39,25 @@ class CreateOrUpdateMutation
                 }
             });
         } elseif (Str::startsWith(Str::lower($operationName), 'update')) {
+          
             $model = $modelName::where('uuid', $args['uuid'])->firstOrFail();
-            $model->update($arguments);
-            $this->addRelations($arguments, $model);
+            if ($args['uuid'] === auth()->user()->uuid) {
+                $model->update($arguments);
+                $this->addRelations($arguments, $model);
+            } else {
+                throw new GraphQLException(__('errors.unauthorized'), 'unauthorized');
+            }
+        }elseif (Str::startsWith(Str::lower($operationName), 'delete')) {
+
+            $model = $modelName::where('uuid', $args['uuid'])->firstOrFail();
+            
+            if ($args['uuid'] === auth()->user()->uuid) {
+                $model->delete();
+            } else {
+                throw new GraphQLException(__('errors.unauthorized'), 'unauthorized');
+            }
         }
 
         return $model;
-    }
-
-    protected function getModelNameFromOperation($operationName): string
-    {
-        $modelNamePart = $this->replaceFirstOccurrence($operationName);
-        $modelName = 'App\\Models\\'.Str::studly($modelNamePart);
-
-        if (!class_exists($modelName)) {
-            throw new GraphQLException(__('errors.model_not_found', ['model' => $modelName]), 'model_not_found');
-        }
-
-        return $modelName;
-    }
-
-    private function replaceFirstOccurrence($string): string
-    {
-        $pattern = '/^(create|update)/i';
-        $replacement = '';
-        return preg_replace($pattern, $replacement, $string, 1);
     }
 }

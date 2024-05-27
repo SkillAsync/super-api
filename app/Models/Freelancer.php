@@ -2,25 +2,13 @@
 
 namespace App\Models;
 
-
-use App\Models\Traits\UuidModelTrait;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Model;
 
-use Laravel\Sanctum\HasApiTokens;
-
-class User extends Authenticatable implements MustVerifyEmail
+class Freelancer extends BaseModel
 {
+    use HasFactory;
 
-    use HasFactory, Notifiable, UuidModelTrait,HasApiTokens,HasRoles;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'first_name',
         'last_name',
@@ -48,7 +36,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
-
 
     public function services()
     {

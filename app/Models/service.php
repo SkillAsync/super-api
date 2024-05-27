@@ -5,7 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class service extends BaseModel
+class Service extends BaseModel
 {
     
     protected $fillable = [

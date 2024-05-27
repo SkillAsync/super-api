@@ -36,7 +36,6 @@ class UserFactory extends Factory
             'city' => $this->faker->city,
             'address' => $this->faker->address,
             'bio' => $this->faker->sentence,
-            'role' => 'user',
             'enabled' => true,
             'remember_token' => Str::random(10),
         ];

@@ -11,15 +11,16 @@ type User {
     city: String
     address: String
     bio: String
-    role: role
     enabled: Boolean
-    services: [Service]! @hasMany
 }
 
-enum role {
-    ADMIN @enum(value: "admin")
-    USER  @enum(value: "user")
-    Freelancer @enum(value: "freelancer")
+type Freelancer {
+    uuid: String!
+    user: User! @belongsTo
+    description: String!
+    nif: String
+    services: [Service!] @hasMany
+    status: status!
 }
 
 input CreateUserInput {
@@ -34,7 +35,6 @@ input CreateUserInput {
     city: String
     address: String
     bio: String
-    role: role
     enabled: Boolean
 }
 
@@ -50,8 +50,15 @@ input UpdateUserInput {
     city: String
     address: String
     bio: String
-    role: role
     enabled: Boolean
+}
+
+input CreataFreelancerForUserInput {
+    user: CreateBelongsTo!
+    description: String!
+    nif: String
+    services: [CreateBelongsTo!]
+    status: status
 }
 
 extend type Query {
@@ -62,7 +69,6 @@ extend type Query {
         last_name: String @where(operator: "like"),
         first_name: String @where(operator: "like"),
         email: String @where(operator: "like"),
-        role: role @where,
         orderBy: _ @orderBy(columns: [
             "first_name",
             "last_name",
@@ -74,6 +80,8 @@ extend type Query {
 
 extend type Mutation {
     createUser(input: CreateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") 
-    updateUser(uuid: String! @eq,input: UpdateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") 
-    deleteUser(uuid: String! @eq): User @delete
+    updateUser(uuid: String! @eq,input: UpdateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") @guard 
+    deleteUser(uuid: String! @eq): User @field(resolver: "CreateOrUpdateMutation") @guard 
+
+    createFreelancerForUser(input: CreataFreelancerForUserInput! @spread): User @field(resolver: "AssignRole") @guard
  }

@@ -18,10 +18,12 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
+        $categories = Category::all(); 
+        $user = User::all();
         return [
             'uuid' => $this->faker->uuid,
-            'user_id' => User::factory()->create()->id,
-            'category_id' => Category::factory()->create()->id,
+            'user_id' => $user->random()->id,
+            'category_id' => $categories->random()->id,
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'image' => $this->faker->imageUrl(),

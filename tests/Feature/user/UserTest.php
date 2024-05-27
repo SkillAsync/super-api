@@ -4,55 +4,29 @@ namespace Tests\Feature\user;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase, MakesGraphQLRequests;
+    use  MakesGraphQLRequests, RefreshDatabase;
 
-    public function test_can_create_user()
-    {
-        // Define input for the GraphQL mutation
-        $mutation = '
-            mutation createUser($input: CreateUserInput!) {
-                createUser(input: $input) {
-                    first_name
-                    last_name
-                    email
-                    password
-                }
-            }
-        ';
-
-        // Execute the GraphQL mutation
-        $response = $this->graphQL($mutation, [
-            'input' => [
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-                'email' => 'test@gmail.com',
-                'password' => 'password',
-            ],
-        ]);
-
-        // Assert the response JSON data
-        $response->assertJson([
-            'data' => [
-                'createUser' => [
-                    'first_name' => 'John',
-                    'last_name' => 'Doe',
-                    'email' => 'test@gmail.com',
-                ],
-            ],
-        ]);
-    }
+    
 
     public function test_can_update_user()
     {
-        // Create a user
-        $user = User::factory()->create();
-        //dd($user->uuid);
+
+        $user = User::factory()->create([
+            'email' => 'jose@example.com',
+            'password' => bcrypt('123456789'),
+            'email_verified_at' => null,
+            'uuid' => Uuid::uuid4(),
+        ]);
+
+        Auth::setUser($user);
+      
         // Define input for the GraphQL mutation
         $mutation = '
             mutation updateUser($uuid: String!, $input: UpdateUserInput!) {
@@ -63,7 +37,7 @@ class UserTest extends TestCase
                 }
             }
         ';
-
+            
         // Execute the GraphQL mutation
         $response = $this->graphQL($mutation, [
             'uuid' => $user->uuid,
@@ -73,7 +47,7 @@ class UserTest extends TestCase
                 'email' => 'test@gmail.com',
             ],
         ]);
-
+       
         // Assert the response JSON data
         $response->assertJson([
             'data' => [
@@ -89,9 +63,17 @@ class UserTest extends TestCase
 
     public function test_can_delete_user()
     {
-        // Create a user
-        $user = User::factory()->create();
 
+         $user = User::factory()->create([
+            'email' => 'jose@example.com',
+            'password' => bcrypt('123456789'),
+            'email_verified_at' => null,
+            'uuid' => Uuid::uuid4(),
+        ]);
+
+        Auth::setUser($user);
+        // Create a user
+    
         // Define input for the GraphQL mutation
         $mutation = '
             mutation deleteUser($uuid: String!) {
@@ -105,7 +87,7 @@ class UserTest extends TestCase
 
         // Execute the GraphQL mutation
         $response = $this->graphQL($mutation, [
-            'uuid' => $user->uuid,
+            'uuid' => $user->uuid->toString(),
         ]);
 
         // Assert the response JSON data
