@@ -24,6 +24,5 @@ class CategorySeeder extends Seeder
                             'slug' => 'game-development',]);
         Category::create(['name' => 'Marketing',
                             'slug' => 'marketing',]);
-        Category::create(['name' => 'Design']);
     }
 }
