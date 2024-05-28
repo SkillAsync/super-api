@@ -36,7 +36,7 @@ services:
     container_name: laravel-api
     working_dir: /var/www/html
     command: >
-      sh -c "composer install && php artisan migrate && php-fpm && php artisan tinker"
+      sh -c "composer install && php artisan migrate:refresh --seed && php-fpm"
     volumes:
       - .:/var/www/html
     networks:
