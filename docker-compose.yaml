@@ -10,10 +10,27 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - api-laravel
-      - laravel-database
+      - production-db
+      - sandbox-db
     networks:
       - backend-net
-  laravel-database:
+  sandbox-db: 
+    image: lscr.io/linuxserver/sqlitebrowser:latest
+    container_name: sqlitebrowser
+    security_opt:
+      - seccomp:unconfined 
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./sandbox:/config
+    ports:
+      - "3101:3000"
+      - "3102:3001"
+    restart: unless-stopped
+
+  production-db:
     image: postgres:latest
     container_name: laravel-db
     restart: always
