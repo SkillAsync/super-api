@@ -84,4 +84,4 @@ extend type Mutation {
     deleteUser(uuid: String! @eq): User @field(resolver: "CreateOrUpdateMutation") @guard 
 
     createFreelancerForUser(input: CreataFreelancerForUserInput! @spread): User @field(resolver: "AssignRole") @guard
- }
+}
