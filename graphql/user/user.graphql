@@ -1,10 +1,9 @@
 type User {  
-     uuid: String!
+    uuid: String!
     first_name: String
     last_name: String
     email: String!
     email_verified_at: String
-    password: String
     phone_country: String
     phone: String
     avatar: String
@@ -12,46 +11,54 @@ type User {
     city: String
     address: String
     bio: String
-    role: role
     enabled: Boolean
 }
 
-enum role {
-    ADMIN @enum(value: "admin")
-    USER  @enum(value: "user")
-    Freelancer @enum(value: "freelancer")
+type Freelancer {
+    uuid: String!
+    user: User! @belongsTo
+    description: String!
+    nif: String
+    services: [Service!] @hasMany
+    status: status!
 }
 
 input CreateUserInput {
     first_name: String
     last_name: String
-    email: String!
-    password: String!
+    email: String! @rules(apply: ["required", "email"])
+    password: String! @rules(apply: ["required", "min:8"])
     phone_country: String
-    phone: String
+    phone: String @rules(apply: ["min:1", "max:15"])
     avatar: String
     country: String
     city: String
     address: String
     bio: String
-    role: role
     enabled: Boolean
 }
 
 input UpdateUserInput {
     first_name: String
     last_name: String
-    email: String
-    password: String
-    phone_country: String
+    email: String @rules(apply: ["unique:users,email"])
+    password: String @rules(apply: ["min:8"])
+    phone_country: String @rules(apply: ["min:1", "max:3"])
     phone: String
     avatar: String
     country: String
     city: String
     address: String
     bio: String
-    role: role
     enabled: Boolean
+}
+
+input CreataFreelancerForUserInput {
+    user: CreateBelongsTo!
+    description: String!
+    nif: String
+    services: [CreateBelongsTo!]
+    status: status
 }
 
 extend type Query {
@@ -72,24 +79,9 @@ extend type Query {
 }
 
 extend type Mutation {
-    createUser(
-        input: CreateUserInput! @spread
-    ): User @create
-    updateUser(
-        uuid: String! @eq,
-        input: UpdateUserInput! @spread
-    ): User @update
-    deleteUser(
-        uuid: String! @eq
-    ): User @delete
+    createUser(input: CreateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") 
+    updateUser(uuid: String! @eq,input: UpdateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") @guard 
+    deleteUser(uuid: String! @eq): User @field(resolver: "CreateOrUpdateMutation") @guard 
+
+    createFreelancerForUser(input: CreataFreelancerForUserInput! @spread): User @field(resolver: "AssignRole") @guard
  }
-
-
-
-# type loginWebInput {
-#     email: String! @rules(apply: ["email", "required"])
-#     password: String! @rules(apply: ["required"])
-# }
-# extend type Mutation {
-#     login(input: loginWebInput! @spread): String @field(resolver: "AuthMutator@login")
-# }

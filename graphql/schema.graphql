@@ -1,7 +1,18 @@
 
 #import user/*.graphql
 #import service/*.graphql
+#import auth/*.graphql
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+
+
+input CreateBelongsTo {
+    connect: String
+}
+
+input UpdateBelongsTo {
+    connect: String
+}
 
 type Query
 type Mutation

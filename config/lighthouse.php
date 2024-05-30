@@ -40,6 +40,8 @@ return [
 
             // Logs every incoming GraphQL query.
             // Nuwave\Lighthouse\Http\Middleware\LogGraphQLQueries::class,
+            //App\Http\Middleware\EnsureEmailAndPhoneVerified::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ],
 
         /*
@@ -61,7 +63,9 @@ return [
     |
     */
 
-    'guards' => null,
+    'guards' => [
+        'api' => 'sanctum',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -133,19 +137,6 @@ return [
          */
         'ttl' => env('LIGHTHOUSE_QUERY_CACHE_TTL', 24 * 60 * 60),
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Parse source location
-    |--------------------------------------------------------------------------
-    |
-    | Should the source location be included in the AST nodes resulting from query parsing?
-    | Setting this to `false` improves performance, but omits the key `locations` from errors,
-    | see https://spec.graphql.org/October2021/#sec-Errors.Error-result-format.
-    |
-    */
-
-    'parse_source_location' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -255,9 +246,7 @@ return [
     */
 
     'error_handlers' => [
-        Nuwave\Lighthouse\Execution\AuthenticationErrorHandler::class,
-        Nuwave\Lighthouse\Execution\AuthorizationErrorHandler::class,
-        Nuwave\Lighthouse\Execution\ValidationErrorHandler::class,
+        \App\Exceptions\GraphQLExceptionHandler::class,
         Nuwave\Lighthouse\Execution\ReportingErrorHandler::class,
     ],
 
@@ -313,10 +302,8 @@ return [
     | Transactional Mutations
     |--------------------------------------------------------------------------
     |
-    | If set to true, the execution of built-in directives that mutate models
-    | will be wrapped in a transaction to ensure atomicity.
-    | The transaction is committed after the root field resolves,
-    | thus errors in nested fields do not cause a rollback.
+    | If set to true, built-in directives that mutate models will be
+    | wrapped in a transaction to ensure atomicity.
     |
     */
 
@@ -467,28 +454,5 @@ return [
          * Location of resolver classes when resolving the `_entities` field.
          */
         'entities_resolver_namespace' => 'App\\GraphQL\\Entities',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Tracing
-    |--------------------------------------------------------------------------
-    |
-    | Configuration for tracing support.
-    |
-    */
-
-    'tracing' => [
-        /*
-         * Driver used for tracing.
-         *
-         * Accepts the fully qualified class name of a class that implements Nuwave\Lighthouse\Tracing\Tracing.
-         * Lighthouse provides:
-         * - Nuwave\Lighthouse\Tracing\ApolloTracing\ApolloTracing::class
-         * - Nuwave\Lighthouse\Tracing\FederatedTracing\FederatedTracing::class
-         *
-         * In Lighthouse v7 the default will be changed to 'Nuwave\Lighthouse\Tracing\FederatedTracing\FederatedTracing::class'.
-         */
-        'driver' => Nuwave\Lighthouse\Tracing\ApolloTracing\ApolloTracing::class,
     ],
 ];

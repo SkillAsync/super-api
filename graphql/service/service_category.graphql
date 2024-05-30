@@ -1,5 +1,0 @@
-type category {
-  uuid: String!
-  name: String!
-  slug: String!
-}
