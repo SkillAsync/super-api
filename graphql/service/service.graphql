@@ -42,7 +42,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    createservice(input: CreateserviceInput!): Service! @field(resolver: "CreateOrUpdateMutation")
-    updateservice(uuid: String!, input: UpdateserviceInput!): Service! @field(resolver: "CreateOrUpdateMutation")
-    deleteservice(uuid: String!): Service! @field(resolver: "CreateOrUpdateMutation")
+    createservice(input: CreateserviceInput!): Service! @field(resolver: "CreateOrUpdateService") @guard
+    updateservice(uuid: String!, input: UpdateserviceInput!): Service! @field(resolver: "CreateOrUpdateMutation") @guard
+    deleteservice(uuid: String!): Service! @field(resolver: "CreateOrUpdateMutation") @guard
 }

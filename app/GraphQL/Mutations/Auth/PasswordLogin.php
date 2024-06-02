@@ -14,11 +14,13 @@ final readonly class PasswordLogin
         $user = User::where('email', $args['username'])->first();
         
         if (! $user || ! Hash::check($args['password'], $user->password)) {
+
             throw ValidationException::withMessages([
-                'username' => ['The provided credentials are incorrect.'],
+                'username' => ['Los datos de acceso son incorrectos.'],
             ]);
         }
-
-        return $user->createToken($args['device'])->plainTextToken;
+        $token = $user->createToken('web')->plainTextToken;
+        
+        return ['access_token' => $token, 'user' => $user];
     }
 }

@@ -14,15 +14,6 @@ type User {
     enabled: Boolean
 }
 
-type Freelancer {
-    uuid: String!
-    user: User! @belongsTo
-    description: String!
-    nif: String
-    services: [Service!] @hasMany
-    status: status!
-}
-
 input CreateUserInput {
     first_name: String
     last_name: String
@@ -36,6 +27,12 @@ input CreateUserInput {
     address: String
     bio: String
     enabled: Boolean
+}
+
+enum Role {
+    ADMIN @enum(value: "admin")
+    USER @enum(value: "user")
+    FREELANCER @enum(value: "freelancer")
 }
 
 input UpdateUserInput {
@@ -53,14 +50,6 @@ input UpdateUserInput {
     enabled: Boolean
 }
 
-input CreataFreelancerForUserInput {
-    user: CreateBelongsTo!
-    description: String!
-    nif: String
-    services: [CreateBelongsTo!]
-    status: status
-}
-
 extend type Query {
     getUser(
         uuid: String! @eq
@@ -69,6 +58,7 @@ extend type Query {
         last_name: String @where(operator: "like"),
         first_name: String @where(operator: "like"),
         email: String @where(operator: "like"),
+        role: Role @builder(method: "App\\GraphQL\\Builders\\GenericSearch@searchByCountryUuid"),
         orderBy: _ @orderBy(columns: [
             "first_name",
             "last_name",
@@ -83,5 +73,4 @@ extend type Mutation {
     updateUser(uuid: String! @eq,input: UpdateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") @guard 
     deleteUser(uuid: String! @eq): User @field(resolver: "CreateOrUpdateMutation") @guard 
 
-    createFreelancerForUser(input: CreataFreelancerForUserInput! @spread): User @field(resolver: "AssignRole") @guard
 }

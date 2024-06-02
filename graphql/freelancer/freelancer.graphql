@@ -1,0 +1,47 @@
+type Freelancer {
+    uuid: String!
+    user: User! @belongsTo
+    description: String!
+    nif: String
+    services: [Service] @hasMany
+    status: status!
+}
+
+input CreataFreelancerForUserInput {
+    user: CreateBelongsTo!
+    description: String!
+    nif: String
+    services: [CreateBelongsTo!]
+    status: status
+}
+
+input UpdateFreelancerForUserInput {
+    user: UpdateBelongsTo
+    description: String
+    nif: String
+    services: [UpdateBelongsTo]
+    status: status
+}
+
+extend type Query {
+    getFreelancer(
+        uuid: String! @eq
+    ): Freelancer! @find
+    getAllFreelancers(
+        description: String @where(operator: "like"),
+        nif: String @where(operator: "like"),
+        status: status @where
+        orderBy: _ @orderBy(columns: [
+            "description",
+            "nif",
+            "status",
+            "created_at",
+        ])
+    ): [Freelancer!]! @paginate(defaultCount: 10)
+}
+
+extend type Mutation {
+    createFreelancer(
+        input: CreataFreelancerForUserInput! @spread
+    ): Freelancer! @field(resolver: "CreateOrUpdateMutation") @guard 
+}
