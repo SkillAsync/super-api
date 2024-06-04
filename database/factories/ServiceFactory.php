@@ -18,8 +18,10 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
-        $categories = Category::all(); 
-        $user = User::all();
+       
+        $categories = Category::all();
+
+        $user = User::get();
         return [
             'uuid' => $this->faker->uuid,
             'user_id' => $user->random()->id,
@@ -27,8 +29,8 @@ class ServiceFactory extends Factory
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'image' => $this->faker->imageUrl(),
-            'price' => $this->faker->randomFloat(2, 1, 100),
-            'status' => $this->faker->randomElement(['active', 'inactive']),
+            'price' => 10.5,
+            
         ];
     }
 }

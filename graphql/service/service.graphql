@@ -38,11 +38,17 @@ extend type Query {
         uuid: String! @eq
     ): Service! @find
 
-    getAllservices: [Service!]! @all
+    getAllservices(
+        title: String @where(operator: "like"),
+        description: String @where(operator: "like"),
+        price: Float @where(operator: "eq"),
+        status: status @where(operator: "eq")
+        generecSearch: String @builder(method: "App\\GraphQL\\Builders\\GenericSearch@searchServiceByTitleOrDescription")
+    ): [Service!]! @paginate(defaultCount: 11) 
 }
 
 extend type Mutation {
     createservice(input: CreateserviceInput!): Service! @field(resolver: "CreateOrUpdateService") @guard
-    updateservice(uuid: String!, input: UpdateserviceInput!): Service! @field(resolver: "CreateOrUpdateMutation") @guard
-    deleteservice(uuid: String!): Service! @field(resolver: "CreateOrUpdateMutation") @guard
+    updateservice(uuid: String!, input: UpdateserviceInput!): Service! @field(resolver: "CreateOrUpdateService") @guard
+    deleteservice(uuid: String!): Service! @field(resolver: "CreateOrUpdateService") @guard
 }

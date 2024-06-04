@@ -58,7 +58,6 @@ extend type Query {
         last_name: String @where(operator: "like"),
         first_name: String @where(operator: "like"),
         email: String @where(operator: "like"),
-        role: Role @builder(method: "App\\GraphQL\\Builders\\GenericSearch@searchByCountryUuid"),
         orderBy: _ @orderBy(columns: [
             "first_name",
             "last_name",
@@ -72,5 +71,4 @@ extend type Mutation {
     createUser(input: CreateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") 
     updateUser(uuid: String! @eq,input: UpdateUserInput! @spread): User @field(resolver: "CreateOrUpdateMutation") @guard 
     deleteUser(uuid: String! @eq): User @field(resolver: "CreateOrUpdateMutation") @guard 
-
 }
