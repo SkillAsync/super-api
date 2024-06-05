@@ -25,7 +25,7 @@ class FreelancerFactory extends Factory
         return [
             'uuid' => $this->faker->uuid,
             'user_id' => $user->random()->id,
-            'description' => $this->faker->paragraph,
+            'description' => $this->faker->text(),
             'service_id' => $service->random()->id,
             'specialty' => $category->random()->id,
 
