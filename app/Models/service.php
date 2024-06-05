@@ -31,4 +31,9 @@ class Service extends BaseModel
         return $this->belongsTo(Category::class);
     }
 
+     public function freelancer(): BelongsTo
+    {
+        return $this->belongsTo(Freelancer::class);
+    }
+
 }
