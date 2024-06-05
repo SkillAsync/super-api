@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,11 +21,14 @@ class FreelancerFactory extends Factory
     {
         $user = User::all();
         $service = Service::all();
+        $category = Category::all();
         return [
             'uuid' => $this->faker->uuid,
             'user_id' => $user->random()->id,
             'description' => $this->faker->paragraph,
             'service_id' => $service->random()->id,
+            'specialty' => $category->random()->id,
+
         ];
     }
 }
