@@ -27,6 +27,7 @@ class AddSpecialtyToFreelancersTable extends Migration
     public function down()
     {
         Schema::table('freelancers', function (Blueprint $table) {
+            $table->dropForeign(['specialty']);
             $table->dropColumn('specialty');
         });
     }
