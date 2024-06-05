@@ -11,7 +11,7 @@ class Freelancer extends BaseModel
         'user_id',
         'description',
         'service_id',
-        'specialty',
+        'category_id',
     ];
 
     public function services()
@@ -24,7 +24,7 @@ class Freelancer extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function specialty()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }

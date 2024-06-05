@@ -14,7 +14,7 @@ class AddSpecialtyToFreelancersTable extends Migration
     public function up()
     {
         Schema::table('freelancers', function (Blueprint $table) {
-        $table->foreignId('specialty')->constrained("categories")->onDelete('cascade');        
+        $table->foreignId('category_id')->constrained("categories")->onDelete('cascade');        
 
 });
     }
@@ -27,8 +27,11 @@ class AddSpecialtyToFreelancersTable extends Migration
     public function down()
     {
         Schema::table('freelancers', function (Blueprint $table) {
-            $table->dropForeign(['specialty']);
-            $table->dropColumn('specialty');
+            if (Schema::hasColumn('freelancers', 'category_id')){
+                 $table->dropForeign(['category_id']);
+            $table->dropColumn('category_id');
+            }
+           
         });
     }
 }

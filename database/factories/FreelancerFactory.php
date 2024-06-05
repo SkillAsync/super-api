@@ -27,7 +27,7 @@ class FreelancerFactory extends Factory
             'user_id' => $user->random()->id,
             'description' => $this->faker->text(),
             'service_id' => $service->random()->id,
-            'specialty' => $category->random()->id,
+            'category_id' => $category->random()->id,
 
         ];
     }

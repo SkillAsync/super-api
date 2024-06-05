@@ -27,4 +27,9 @@ class Category extends BaseModel
     {
         return $this->hasMany(Service::class);
     }
+
+    public function freelancers()
+    {
+        return $this->hasMany(Freelancer::class);
+    }
 }
