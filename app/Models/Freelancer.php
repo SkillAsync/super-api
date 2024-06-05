@@ -10,7 +10,6 @@ class Freelancer extends BaseModel
         'uuid',
         'user_id',
         'description',
-        'nif',
         'service_id',
         'status',
     ];

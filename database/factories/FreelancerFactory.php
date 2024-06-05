@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Service>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Freelancer>
  */
-class ServiceFactory extends Factory
+class FreelancerFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,19 +18,13 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
-       
-        $categories = Category::all();
-
         $user = User::all();
+        $service = Service::all();
         return [
             'uuid' => $this->faker->uuid,
             'user_id' => $user->random()->id,
-            'category_id' => $categories->random()->id,
-            'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'image' => $this->faker->imageUrl(),
-            'price' => 10.5,
-            
+            'service_id' => $service->random()->id,
         ];
     }
 }
