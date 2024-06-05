@@ -1,16 +1,16 @@
 type Freelancer {
     uuid: String!
     user: User! @belongsTo
+    specialty: Category! @belongsTo
     description: String!
-    nif: String
     services: [Service] @hasMany
-    status: status!
+    
 }
 
 input CreataFreelancerForUserInput {
     user: CreateBelongsTo!
     description: String!
-    nif: String
+    specialty: CreateBelongsTo!
     services: [CreateBelongsTo!]
     status: status
 }
@@ -18,9 +18,8 @@ input CreataFreelancerForUserInput {
 input UpdateFreelancerForUserInput {
     user: UpdateBelongsTo
     description: String
-    nif: String
+    specialty: UpdateBelongsTo
     services: [UpdateBelongsTo]
-    status: status
 }
 
 extend type Query {
@@ -29,8 +28,7 @@ extend type Query {
     ): Freelancer! @find
     getAllFreelancers(
         description: String @where(operator: "like"),
-        nif: String @where(operator: "like"),
-        status: status @where
+        specialty: String @where(operator: "like"),
         orderBy: _ @orderBy(columns: [
             "description",
             "nif",
