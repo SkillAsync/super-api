@@ -12,7 +12,12 @@ type loginPayload {
     user: User
 }
 
+type LogoutResponse {
+    message: String!
+}
+
 
 extend type Mutation {
     login(input: LoginInput @spread): loginPayload @field(resolver: "Auth\\PasswordLogin")
+    logout: LogoutResponse! @field(resolver: "Auth\\Logout")
 }
