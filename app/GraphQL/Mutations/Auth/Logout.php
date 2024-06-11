@@ -27,8 +27,7 @@ class Logout
             $token->delete();
         });
 
-        
-
+        Auth::logout();
         return [
             'status' => 'TOKEN_REVOKED',
             'message' => __('Your session has been terminated'),

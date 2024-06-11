@@ -1,0 +1,24 @@
+type FreelancerServices {
+  uuid: String!
+  user: User! @belongsTo
+  service: Service! @belongsTo
+}
+
+input CreateFreelancerServicesInput {
+  user: CreateBelongsTo
+  service: CreateBelongsTo
+}
+
+# extend type Query {
+#   getALLFreelancerServices(
+#     user:
+#     service: _ @whereHasConditions(columns: ["uuid"])
+#   ): [FreelancerServices!] @paginate(defaultCount: 10)
+#   getFreelancerServices(
+#     uuid: String! @eq
+#   ): FreelancerServices! @find
+# }
+
+extend type Mutation {
+  createFreelancerServices(input: CreateFreelancerServicesInput! @spread ): FreelancerServices @field(resolver: "CreateOrUpdateMutation") @guard
+}

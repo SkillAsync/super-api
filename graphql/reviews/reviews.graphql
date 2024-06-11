@@ -1,0 +1,34 @@
+type Review {
+    uuid: String!
+    user: User! @belongsTo
+    freelancer: Freelancer! @belongsTo
+    service: Service! 
+    rating: Int!
+    comment: String
+    Date: String
+}
+
+input CreateReviewInput {
+    user: CreateBelongsTo
+    freelancer: CreateBelongsTo
+    service: CreateBelongsTo
+    rating: Int!
+    comment: String!
+}
+
+extend type Query {
+    getALLReviews(
+        user: String
+        freelancer: String
+        service: String
+    ): [Review!] @paginate(defaultCount: 10)
+    getReview(
+        uuid: String! @eq
+    ): Review! @find
+}
+
+extend type Mutation {
+    createReview(input: CreateReviewInput! @spread ): Review @field(resolver: "CreateOrUpdateMutation") @guard
+}
+
+

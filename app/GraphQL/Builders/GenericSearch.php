@@ -9,7 +9,10 @@ class GenericSearch
     public function searchServiceByTitleOrDescription(Builder $builder, $args): Builder
     {
 
-        if ($args) {
+        if (empty($args)) {
+            //devolver vacio
+            return $builder->where('title', 'like', "$args");
+        }else{
             $builder->where('title', 'like', "%$args%")
                 ->orWhere('description', 'like', "%$args%");
         }
