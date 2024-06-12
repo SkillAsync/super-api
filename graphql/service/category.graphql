@@ -18,6 +18,11 @@ input updateCategoryInput {
 
 extend type Query {
     getCategory(uuid: String! @eq): Category @find
+    getAllCategories(
+        name: String @where(operator: "like"),
+        slug: String @where(operator: "like"),
+        orderBy: _ @orderBy(columns: ["name", "slug"])
+    ): [Category!]! @paginate(defaultCount: 10)
 }
 
 extend type Mutation {

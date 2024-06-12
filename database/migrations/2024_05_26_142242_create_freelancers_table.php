@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->foreignId('user_id')->constrained("users")->onDelete('cascade');
             $table->foreignId('service_id')->nullable()->constrained("services")->onDelete('cascade');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

@@ -2,14 +2,14 @@ type Freelancer {
     uuid: String!
     user: User! @belongsTo
     category: Category! @belongsTo
-    description: String!
+    description: String
     services: [Service] @hasMany
     
 }
 
 input CreataFreelancerForUserInput {
     user: CreateBelongsTo!
-    description: String!
+    description: String
     category: CreateBelongsTo!
     services: [CreateBelongsTo!]
     status: status
