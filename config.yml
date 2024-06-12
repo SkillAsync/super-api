@@ -1,0 +1,28 @@
+introspection:
+  url: 'http://localhost:8000/graphql' # Reemplaza con el endpoint de tu API local
+
+info:
+  title: SkillAsync GraphQL API
+  description: >
+    **SkillAsync** es una innovadora plataforma web que **conecta freelancers con clientes**, optimizando la colaboración y el crecimiento profesional. Con una interfaz intuitiva desarrollada en **Vue.js**, y un robusto Backend en **GraphQL y Laravel**, SkillAsync ofrece una experiencia de usuario excepcional.
+
+    Las características destacadas incluyen:
+    - **Publicación de servicios** y **búsqueda de proyectos** eficiente.
+    - **Sistema de calificación y reseñas** para fomentar la confianza.
+    - **Registro de usuarios** y **autenticación segura**.
+    - **Gestión avanzada de perfiles** y **transacciones**.
+
+    Afrontando y superando desafíos técnicos, SkillAsync se ha consolidado mediante pruebas TDD y el uso de **Docker Compose** para un despliegue eficiente en **AWS EC2**, con planes de migración a **Amazon EKS** para una escalabilidad sin precedentes.
+
+    SkillAsync no es solo una plataforma, es un ecosistema en crecimiento para **empoderar la economía gig**, respaldado por un modelo financiero sostenible y el apoyo de la comunidad tecnológica de Madrid.
+
+contact:
+  name: 'SkillAsync Support Team'
+  url: 'https://www.skillasync.com/contact'
+  email: 'sKpLs@gmail.com'
+  phone: '555-555-5555'
+
+servers:
+  - url: 'http://localhost:8000/graphql'
+    description: Production
+    production: true
